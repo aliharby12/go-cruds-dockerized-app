@@ -1,0 +1,1 @@
+# go-cruds-dockerized-app
