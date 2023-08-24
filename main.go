@@ -1,8 +1,8 @@
 package main
 
 import (
+	"crud-app/controllers"
 	"crud-app/inits"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,10 +15,6 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	r.POST("/posts", controllers.CreatePost)
 	r.Run()
 }
