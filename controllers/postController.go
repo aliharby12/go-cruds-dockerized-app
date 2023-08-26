@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// create a new post
 func CreatePost(c *gin.Context) {
 
 	var body struct {
@@ -27,5 +28,18 @@ func CreatePost(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"post": post,
+	})
+}
+
+// list posts
+func ListPosts(c *gin.Context) {
+
+	var posts []models.Post
+	inits.DB.Find(&posts)
+
+	c.JSON(http.StatusOK, gin.H{
+		"posts": posts,
+		"count": int64(len(posts)),
+		"error": c.Errors,
 	})
 }
