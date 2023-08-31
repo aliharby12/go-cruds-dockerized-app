@@ -10,5 +10,5 @@ COPY . .
 # Build the Go application
 RUN go build -o main .
 
-# Command to run the executable
-CMD ["./main"]
+# Run air
+CMD ["air"]

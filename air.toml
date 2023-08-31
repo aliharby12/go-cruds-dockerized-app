@@ -1,0 +1,7 @@
+[build]
+  bin = "./crud-app"
+  cmd = "go build -o ./crud-app ./main.go"
+  delay = "1000ms" # Set a delay for recompilation
+
+[web]
+  address = "127.0.0.1:8080"

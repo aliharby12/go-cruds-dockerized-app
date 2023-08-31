@@ -1,0 +1,146 @@
+basePath: /api/v1
+definitions:
+  schema.CreatePostRequest:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  schema.ListPostsResponse:
+    properties:
+      count:
+        type: integer
+      errors:
+        type: string
+      posts:
+        items:
+          $ref: '#/definitions/schema.ViewPostResponse'
+        type: array
+    type: object
+  schema.UpdatePostRequest:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  schema.ViewPostResponse:
+    properties:
+      CreatedAt:
+        type: string
+      DeletedAt:
+        type: string
+      Description:
+        type: string
+      ID:
+        type: integer
+      Title:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /posts:
+    get:
+      description: Get a list of all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ListPostsResponse'
+      summary: List all posts
+    post:
+      consumes:
+      - application/json
+      description: Create a new post with the provided data
+      parameters:
+      - description: Post data in JSON format
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/schema.ViewPostResponse'
+      summary: Create a new post
+  /posts/{id}:
+    delete:
+      description: Delete a post by ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Delete post
+    get:
+      description: Get details of a single post by ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ViewPostResponse'
+      summary: View single post
+    put:
+      consumes:
+      - application/json
+      description: Update an existing post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ViewPostResponse'
+      summary: Update post
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
