@@ -1,8 +1,8 @@
 package main
 
 import (
-	"crud-app/controllers"
 	"crud-app/inits"
+	"crud-app/routers"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -34,7 +34,9 @@ func init() {
 // @host      localhost:8080
 // @BasePath  /api/v1
 
-// @securityDefinitions.basic  BasicAuth
+//@securityDefinitions.apikey Authorization
+//@in header
+//@name Bearer
 
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/
@@ -54,16 +56,10 @@ func main() {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	v1 := router.Group("/api/v1")
-	{
-		posts := v1.Group("/posts")
-		{
-			posts.GET(":id", controllers.ViewPost)
-			posts.GET("", controllers.ListPosts)
-			posts.POST("", controllers.CreatePost)
-			posts.DELETE(":id", controllers.DeletePost)
-			posts.PATCH(":id", controllers.UpdatePost)
-		}
-	}
+
+	// Import and initialize user and post routes
+	routers.InitializeUserRoutes(v1.Group("/users"))
+	routers.InitializePostRoutes(v1.Group("/posts"))
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()

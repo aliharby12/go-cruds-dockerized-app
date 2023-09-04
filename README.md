@@ -22,6 +22,9 @@ Short description of your project.
 - PostgreSQL
 - Gin Web Framework
 - GORM (ORM library for Golang)
+- AIR (Air for Golang)
+- Swagger Documentation
+- JWT Authentication
 
 ## Getting Started
 

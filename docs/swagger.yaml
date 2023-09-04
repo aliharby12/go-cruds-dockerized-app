@@ -7,6 +7,13 @@ definitions:
       title:
         type: string
     type: object
+  schema.CreateUserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   schema.ListPostsResponse:
     properties:
       count:
@@ -38,6 +45,19 @@ definitions:
       Title:
         type: string
       UpdatedAt:
+        type: string
+    type: object
+  schema.ViewUserResponse:
+    properties:
+      CreatedAt:
+        type: string
+      DeletedAt:
+        type: string
+      ID:
+        type: integer
+      UpdatedAt:
+        type: string
+      Username:
         type: string
     type: object
 externalDocs:
@@ -140,7 +160,53 @@ paths:
           schema:
             $ref: '#/definitions/schema.ViewPostResponse'
       summary: Update post
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user and generate a JWT token
+      parameters:
+      - description: User data in JSON format
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ViewUserResponse'
+      summary: Login a user
+      tags:
+      - Authentication
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user and generate a JWT token
+      parameters:
+      - description: User data in JSON format
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/schema.ViewUserResponse'
+      summary: Register a new user
+      tags:
+      - Authentication
 securityDefinitions:
-  BasicAuth:
-    type: basic
+  Authorization:
+    in: header
+    name: Bearer
+    type: apiKey
 swagger: "2.0"
