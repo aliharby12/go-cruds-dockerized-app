@@ -1,0 +1,46 @@
+# Ignore editor-specific files and directories
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore version control files and directories
+.git/
+.gitignore
+.gitattributes
+
+# Ignore Go build artifacts
+*.exe
+*.o
+*.out
+
+# Ignore the vendor directory
+/vendor/
+
+# Ignore Go modules cache
+/go.sum
+/go.mod
+
+# Ignore temporary and log files
+*.log
+*.log.*
+crash-*
+
+# Ignore macOS-specific files and directories
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore Windows-specific files and directories
+Thumbs.db
+ehthumbs.db
+
+# Ignore Linux-specific files and directories
+lost+found/
+
+# Ignore user-specific configuration files
+.env
+
+# Ignore test and profiling data
+*.test
+*.prof
