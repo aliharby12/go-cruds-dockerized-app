@@ -60,3 +60,13 @@ Short description of your project.
 
    ```bash
    ./run.sh down
+
+1. **To run your Go application without Docker, use the following command:**
+
+   ```bash
+   go run migrations/migrate.go
+   ```
+
+   ```bash
+   air
+   ```
