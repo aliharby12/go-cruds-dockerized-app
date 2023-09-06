@@ -25,6 +25,22 @@ definitions:
           $ref: '#/definitions/schema.ViewPostResponse'
         type: array
     type: object
+  schema.ListUsersResponse:
+    properties:
+      count:
+        type: integer
+      errors:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/schema.ViewUserResponse'
+        type: array
+    type: object
+  schema.TokenResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
   schema.UpdatePostRequest:
     properties:
       description:
@@ -55,6 +71,8 @@ definitions:
         type: string
       ID:
         type: integer
+      Role:
+        type: string
       UpdatedAt:
         type: string
       Username:
@@ -77,6 +95,19 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /myposts:
+    get:
+      description: Get a list of all my posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ListPostsResponse'
+      summary: List all my posts
+      tags:
+      - Posts
   /posts:
     get:
       description: Get a list of all posts
@@ -88,6 +119,8 @@ paths:
           schema:
             $ref: '#/definitions/schema.ListPostsResponse'
       summary: List all posts
+      tags:
+      - Posts
     post:
       consumes:
       - application/json
@@ -107,6 +140,8 @@ paths:
           schema:
             $ref: '#/definitions/schema.ViewPostResponse'
       summary: Create a new post
+      tags:
+      - Posts
   /posts/{id}:
     delete:
       description: Delete a post by ID
@@ -120,6 +155,8 @@ paths:
         "204":
           description: No Content
       summary: Delete post
+      tags:
+      - Posts
     get:
       description: Get details of a single post by ID
       parameters:
@@ -136,6 +173,8 @@ paths:
           schema:
             $ref: '#/definitions/schema.ViewPostResponse'
       summary: View single post
+      tags:
+      - Posts
     put:
       consumes:
       - application/json
@@ -160,6 +199,21 @@ paths:
           schema:
             $ref: '#/definitions/schema.ViewPostResponse'
       summary: Update post
+      tags:
+      - Posts
+  /users:
+    get:
+      description: Get a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ListUsersResponse'
+      summary: List all users
+      tags:
+      - Users
   /users/login:
     post:
       consumes:
@@ -178,10 +232,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schema.ViewUserResponse'
+            $ref: '#/definitions/schema.TokenResponse'
       summary: Login a user
       tags:
-      - Authentication
+      - Users
+  /users/profile:
+    get:
+      description: Get details of my profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ViewUserResponse'
+      summary: View my profile
+      tags:
+      - Users
   /users/register:
     post:
       consumes:
@@ -200,10 +267,29 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/schema.ViewUserResponse'
+            $ref: '#/definitions/schema.TokenResponse'
       summary: Register a new user
       tags:
-      - Authentication
+      - Users
+  /users/user-posts/{id}:
+    get:
+      description: Get a list of all user posts
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ListPostsResponse'
+      summary: List all user posts
+      tags:
+      - Users
 securityDefinitions:
   Authorization:
     in: header

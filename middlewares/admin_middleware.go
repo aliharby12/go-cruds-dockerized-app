@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"crud-app/models"
 	"crud-app/utils"
 	"net/http"
 	"strings"
@@ -9,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware() gin.HandlerFunc {
+func AdminRoleMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
@@ -26,10 +27,12 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// pass username to c
 		claims, _ := token.Claims.(jwt.MapClaims)
-		c.Set("userID", claims["userID"])
-
+		if claims["role"] != models.AdminRole {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized admin"})
+			c.Abort()
+			return
+		}
 		c.Next()
 	}
 }

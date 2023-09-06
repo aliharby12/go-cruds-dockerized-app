@@ -10,9 +10,11 @@ import (
 var jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // GenerateToken generates a JWT token for a given username.
-func GenerateToken(username string) (string, error) {
+func GenerateToken(username string, role string, userID uint) (string, error) {
 	claims := jwt.MapClaims{
 		"username": username,
+		"userID":   userID,
+		"role":     role,
 		"exp":      time.Now().Add(time.Hour * 24 * 7).Unix(), // Set the expiration time (e.g., 7 days)
 		"iat":      time.Now().Unix(),
 		"token":    "access",

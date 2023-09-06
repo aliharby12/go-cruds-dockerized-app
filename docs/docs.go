@@ -24,11 +24,34 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/myposts": {
+            "get": {
+                "description": "Get a list of all my posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "List all my posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.ListPostsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/posts": {
             "get": {
                 "description": "Get a list of all posts",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Posts"
                 ],
                 "summary": "List all posts",
                 "responses": {
@@ -47,6 +70,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Posts"
                 ],
                 "summary": "Create a new post",
                 "parameters": [
@@ -76,6 +102,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Posts"
+                ],
                 "summary": "View single post",
                 "parameters": [
                     {
@@ -102,6 +131,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Posts"
                 ],
                 "summary": "Update post",
                 "parameters": [
@@ -133,6 +165,9 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Delete a post by ID",
+                "tags": [
+                    "Posts"
+                ],
                 "summary": "Delete post",
                 "parameters": [
                     {
@@ -150,6 +185,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/users": {
+            "get": {
+                "description": "Get a list of all users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List all users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.ListUsersResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/login": {
             "post": {
                 "description": "Login a user and generate a JWT token",
@@ -160,7 +215,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Authentication"
+                    "Users"
                 ],
                 "summary": "Login a user",
                 "parameters": [
@@ -174,6 +229,26 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.TokenResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/profile": {
+            "get": {
+                "description": "Get details of my profile",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "View my profile",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -194,7 +269,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Authentication"
+                    "Users"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
@@ -212,7 +287,36 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/schema.ViewUserResponse"
+                            "$ref": "#/definitions/schema.TokenResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/user-posts/{id}": {
+            "get": {
+                "description": "Get a list of all user posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List all user posts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schema.ListPostsResponse"
                         }
                     }
                 }
@@ -256,6 +360,31 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/schema.ViewPostResponse"
                     }
+                }
+            }
+        },
+        "schema.ListUsersResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "errors": {
+                    "type": "string"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ViewUserResponse"
+                    }
+                }
+            }
+        },
+        "schema.TokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
                 }
             }
         },
@@ -304,6 +433,9 @@ const docTemplate = `{
                 },
                 "ID": {
                     "type": "integer"
+                },
+                "Role": {
+                    "type": "string"
                 },
                 "UpdatedAt": {
                     "type": "string"

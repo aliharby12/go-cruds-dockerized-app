@@ -21,11 +21,19 @@ func getPostByID(id string) (*models.Post, error) {
 // @Summary Create a new post
 // @Description Create a new post with the provided data
 // @Accept json
+// @Tags Posts
 // @Produce json
 // @Param post body schema.CreatePostRequest true "Post data in JSON format"
 // @Success 201 {object} schema.ViewPostResponse
 // @Router /posts [post]
 func CreatePost(c *gin.Context) {
+	// Check if the user is authenticated and get the user ID
+	user, err := GetUserByID(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User is not logged in"})
+		return
+	}
+
 	var body models.Post
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
@@ -36,6 +44,10 @@ func CreatePost(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Title and description cannot be empty"})
 		return
 	}
+
+	// Set the AuthorID field of the post
+	body.Author = user
+	body.AuthorID = user.ID
 
 	result := inits.DB.Create(&body)
 	if result.Error != nil {
@@ -50,6 +62,7 @@ func CreatePost(c *gin.Context) {
 // @Summary List all posts
 // @Description Get a list of all posts
 // @Produce json
+// @Tags Posts
 // @Success 200 {object} schema.ListPostsResponse
 // @Router /posts [get]
 func ListPosts(c *gin.Context) {
@@ -59,10 +72,26 @@ func ListPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"posts": posts, "count": len(posts), "errors": c.Errors})
 }
 
+// List All My Posts
+// @Summary List all my posts
+// @Description Get a list of all my posts
+// @Produce json
+// @Tags Posts
+// @Success 200 {object} schema.ListPostsResponse
+// @Router /myposts [get]
+func ListMyPosts(c *gin.Context) {
+	userID, _ := c.Get("userID")
+	var posts []models.Post
+	inits.DB.Where("author_id = ?", userID).Find(&posts)
+
+	c.JSON(http.StatusOK, gin.H{"posts": posts, "count": len(posts), "errors": c.Errors})
+}
+
 // View single post
 // @Summary View single post
 // @Description Get details of a single post by ID
 // @Produce json
+// @Tags Posts
 // @Param id path string true "Post ID"
 // @Success 200 {object} schema.ViewPostResponse
 // @Router /posts/{id} [get]
@@ -82,6 +111,7 @@ func ViewPost(c *gin.Context) {
 // @Description Update an existing post
 // @Accept json
 // @Produce json
+// @Tags Posts
 // @Param id path string true "Post ID"
 // @Param post body schema.UpdatePostRequest true "Updated post data"
 // @Success 200 {object} schema.ViewPostResponse
@@ -115,6 +145,7 @@ func UpdatePost(c *gin.Context) {
 // @Description Delete a post by ID
 // @Param id path string true "Post ID"
 // @Success 204
+// @Tags Posts
 // @Router /posts/{id} [delete]
 func DeletePost(c *gin.Context) {
 	id := c.Param("id")

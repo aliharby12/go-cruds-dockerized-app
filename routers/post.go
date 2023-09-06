@@ -13,6 +13,7 @@ func InitializePostRoutes(postGroup *gin.RouterGroup) {
 
 	postGroup.GET(":id", controllers.ViewPost)
 	postGroup.GET("", controllers.ListPosts)
+	postGroup.GET("myposts", controllers.ListMyPosts)
 	postGroup.POST("", controllers.CreatePost)
 	postGroup.DELETE(":id", controllers.DeletePost)
 	postGroup.PATCH(":id", controllers.UpdatePost)
